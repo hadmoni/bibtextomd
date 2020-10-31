@@ -58,43 +58,69 @@ def reorder(names, faname):
         if len(namestring) < 1:
             continue
 
-        # Split the `namestring` at the comma, but only perform the
-        # split once.
-        namesplit = namestring.rsplit(',', 1)
+        # Array to store first/middle and last names
+        firsts =[]
+        lasts = []
 
-        # In the expected format, the first element of the split
-        # namestring is the last name. Strip any whitespace and {}.
-        last = namesplit[0].strip().strip('{}')
+        # Check if there's a comma in the name, indicating the format
+        # Last, First Middle
+        if ',' in namestring:
 
-        # There could be many first/middle names, so we collect them in
-        # a list. All of the first/middle names are stored in the
-        # second element of namesplit seperated by whitespace. Split
-        # the first/middle names at the whitespace then strip out any
-        # remaining whitespace and any periods (the periods will be
-        # added in the proper place later).
-        firsts = [i.strip().strip('.') for i in namesplit[1].split()]
+            # Split the `namestring` at the comma, but only perform the
+            # split once.
+            namesplit = namestring.rsplit(',', 1)
 
-        # For the case of hyphenated first names, we need to split at
-        # the hyphen as well. Possible bug: this only works if the
-        # first first name is the hyphenated one, and this replaces all
-        # of the first names with the names split at the hyphen. We'd
-        # like to handle multiple hyphens or a hyphenated name with an
-        # initial more intelligently.
-        if '-' in firsts[0]:
-            firsts = firsts[0].split('-')
+            # In the expected format, the first element of the split
+            # namestring is the last name. Strip any whitespace and {}.
+            last = namesplit[0].strip().strip('{}')
+
+            # There could be many first/middle names, so we collect them in
+            # a list. All of the first/middle names are stored in the
+            # second element of namesplit seperated by whitespace. Split
+            # the first/middle names at the whitespace then strip out any
+            # remaining whitespace and any periods (the periods will be
+            # added in the proper place later).
+            firsts = [i.strip().strip('.') for i in namesplit[1].split()]
+
+            # For the case of hyphenated first names, we need to split at
+            # the hyphen as well. Possible bug: this only works if the
+            # first first name is the hyphenated one, and this replaces all
+            # of the first names with the names split at the hyphen. We'd
+            # like to handle multiple hyphens or a hyphenated name with an
+            # initial more intelligently.
+            if '-' in firsts[0]:
+                firsts = firsts[0].split('-')
+
+        # If there wasn't a comma in the name, it's already in format
+        # First Middle Last
+        else:
+            # Split the name into its component parts
+            namesplit = namestring.split(' ')
+
+            # In this format, the last element of the list is the last name. 
+            # Strip any whitespace and {}
+            last = namesplit[-1].strip().strip('{}')
+
+            # There could be many first/middle names, so we collect them in
+            # a list. All of the first/middle names are contained in the 
+            # non-final elements of namesplit. Strip any whitespace and .
+            firsts = [f.strip().strip('.') for f in namesplit[:-1]]
+
+            # Some names may be hyphenated. Loop through the list of 
+            # first/last names and split those as well.
+            # TODO
 
         # Now that all the first name edge cases are sorted out, we
         # want to initialize all the first names. Set the variable
         # initials to an empty string to we can add to it. Then loop
         # through each of the items in the list of first names. Take
-        # the first element of each item and append a period, but no
-        # space.
+        # the first element of each item and append a period and a space.
         initials = ''
         for item in firsts:
-            initials += item[0] + '.'
+            initials += item[0] + '. '
 
         # Stick all of the parts of the name together in `tidynames`
-        tidynames.append(initials + ' ' + last)
+        tidynames.append(initials + last)
 
     # Find the case of the website author and set the format for that
     # name
