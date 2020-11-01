@@ -169,8 +169,8 @@ def journal_article(ref, faname):
     # before the newline so that kramdown inserts an HTML <br>
     # there.
     reference = (
-        '\n{{:.paper}}\n{open}{title}{close}{{:.papertitle}}  \n'
-        '{open}{authors}{close}{{:.authors}}  \n'
+        '\n{{:.paper}}\n{open}{title}.{close}{{:.papertitle}}  \n'
+        '{open}{authors}.{close}{{:.authors}} '
         '{open}{em}{journal}{em}, '.format(
             open=open_span, close=close_span, title=title, authors=authors, em=em,
             journal=journal,
@@ -394,7 +394,7 @@ def main(argv):
               newline='') as out_file:
 
         # Start with journal articles.
-        out_file.write('Journal Articles\n---\n')
+        out_file.write('Peer Reviewed Journal Papers\n---\n')
 
         # To get the year numbering correct, we have to set a dummy
         # value for pubyear (usage described below).
@@ -408,7 +408,7 @@ def main(argv):
         # logic into a function and calling that.
         ref_list = sort_dict["article"]
         if ref_list:
-            for ref in reflist:
+            for ref in ref_list:
                 # Get the publication year. If the year of the current
                 # reference is not equal to the year of the previous
                 # reference, we need to set `pubyear` equal to `year`.
@@ -420,8 +420,8 @@ def main(argv):
 
                 out_file.write(journal_article(ref, faname))
 
-        # Next are conference papers and posters.
-        out_file.write('\nConference Publications and Posters\n---\n')
+        # Next are conference papers.
+        out_file.write('\nPeer Reviewed Conference Papers\n---\n')
 
         # Same trick for the pubyear as for the journal articles.
         pubyear = ''
@@ -438,13 +438,31 @@ def main(argv):
 
                 out_file.write(in_proceedings(ref, faname))
 
+        # # Next are workshop and short conference papers.
+        # out_file.write('\nWorkshop and Short Conference Papers\n---\n')
+
+        # # Same trick for the pubyear as for the journal articles.
+        # pubyear = ''
+
+        # # Loop through the references in the `inproceedings` type.
+        # ref_list = sort_dict["inproceedings"]
+        # if ref_list:
+        #     for ref in ref_list:
+        #         year = ref["year"]
+        #         if year != pubyear:
+        #             pubyear = year
+        #             write_year = '\n{{:.year}}\n### {}\n'.format(year)
+        #             out_file.write(write_year)
+
+        #         out_file.write(in_proceedings(ref, faname))
+
         # Finally are the theses and dissertations. Same general logic
         # as for the other reference types.
         pubyear = ''
         ref_list = sort_dict.get("phdthesis")
         if ref_list:
             for ref in ref_list:
-                out_file.write("\nPh.D. Dissertation\n---\n\n")
+                out_file.write("\nPh.D. Dissertation\n---\n")
                 year = ref["year"]
                 if year != pubyear:
                     pubyear = year
