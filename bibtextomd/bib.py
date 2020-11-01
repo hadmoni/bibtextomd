@@ -406,17 +406,19 @@ def main(argv):
         # information for each reference type. Therefore, its easiest
         # to write out the logic for each loop instead of writing the
         # logic into a function and calling that.
-        for ref in sort_dict["article"]:
-            # Get the publication year. If the year of the current
-            # reference is not equal to the year of the previous
-            # reference, we need to set `pubyear` equal to `year`.
-            year = ref["year"]
-            if year != pubyear:
-                pubyear = year
-                write_year = '\n{{:.year}}\n### {}\n'.format(year)
-                out_file.write(write_year)
+        ref_list = sort_dict["article"]
+        if ref_list:
+            for ref in reflist:
+                # Get the publication year. If the year of the current
+                # reference is not equal to the year of the previous
+                # reference, we need to set `pubyear` equal to `year`.
+                year = ref["year"]
+                if year != pubyear:
+                    pubyear = year
+                    write_year = '\n{{:.year}}\n### {}\n'.format(year)
+                    out_file.write(write_year)
 
-            out_file.write(journal_article(ref, faname))
+                out_file.write(journal_article(ref, faname))
 
         # Next are conference papers and posters.
         out_file.write('\nConference Publications and Posters\n---\n')
@@ -425,14 +427,16 @@ def main(argv):
         pubyear = ''
 
         # Loop through the references in the `inproceedings` type.
-        for ref in sort_dict["inproceedings"]:
-            year = ref["year"]
-            if year != pubyear:
-                pubyear = year
-                write_year = '\n{{:.year}}\n### {}\n'.format(year)
-                out_file.write(write_year)
+        ref_list = sort_dict["inproceedings"]
+        if ref_list:
+            for ref in ref_list:
+                year = ref["year"]
+                if year != pubyear:
+                    pubyear = year
+                    write_year = '\n{{:.year}}\n### {}\n'.format(year)
+                    out_file.write(write_year)
 
-            out_file.write(in_proceedings(ref, faname))
+                out_file.write(in_proceedings(ref, faname))
 
         # Finally are the theses and dissertations. Same general logic
         # as for the other reference types.
