@@ -437,23 +437,27 @@ def main(argv):
         # Finally are the theses and dissertations. Same general logic
         # as for the other reference types.
         pubyear = ''
-        for ref in sort_dict["phdthesis"]:
-            out_file.write("\nPh.D. Dissertation\n---\n\n")
-            year = ref["year"]
-            if year != pubyear:
-                pubyear = year
-                write_year = '{{:.year}}\n### {}\n'.format(year)
-                out_file.write(write_year)
+        ref_list = sort_dict.get("phdthesis")
+        if ref_list:
+            for ref in ref_list:
+                out_file.write("\nPh.D. Dissertation\n---\n\n")
+                year = ref["year"]
+                if year != pubyear:
+                    pubyear = year
+                    write_year = '{{:.year}}\n### {}\n'.format(year)
+                    out_file.write(write_year)
 
-            out_file.write(thesis(ref, faname))
+                out_file.write(thesis(ref, faname))
 
         pubyear = ''
-        for ref in sort_dict["mastersthesis"]:
-            out_file.write("\nMaster's Thesis\n---\n\n")
-            year = ref["year"]
-            if year != pubyear:
-                pubyear = year
-                write_year = '{{:.year}}\n### {}\n'.format(year)
-                out_file.write(write_year)
+        ref_list = sort_dict.get("mastersthesis")
+        if ref_list:
+            for ref in ref_list:
+                out_file.write("\nMaster's Thesis\n---\n\n")
+                year = ref["year"]
+                if year != pubyear:
+                    pubyear = year
+                    write_year = '{{:.year}}\n### {}\n'.format(year)
+                    out_file.write(write_year)
 
-            out_file.write(thesis(ref, faname))
+                out_file.write(thesis(ref, faname))
