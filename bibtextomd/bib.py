@@ -16,6 +16,7 @@ strong = '**'
 # Set some HTML tags to go around each part of the reference.
 open_span = '<span>'
 close_span = '</span>'
+pdf_icon = '<i class="far fa-file-pdf"></i> PDF'
 
 
 # First is to define a function to format the names we get from BibTeX,
@@ -169,8 +170,8 @@ def journal_article(ref, faname):
     # before the newline so that kramdown inserts an HTML <br>
     # there.
     reference = (
-        '\n{{:.paper}}\n{open}{title}.{close}{{:.papertitle}}  \n'
-        '{open}{authors}.{close}{{:.authors}} '
+        '\n{{:.paper}}\n{open}{authors}.{close}{{:.authors}} '
+        '{open}"{title}."{close}{{:.papertitle}} '
         '{open}{em}{journal}{em}, '.format(
             open=open_span, close=close_span, title=title, authors=authors, em=em,
             journal=journal,
@@ -220,6 +221,13 @@ def journal_article(ref, faname):
                 annote=ref["annote"].replace('\\', ''),
                 )
             )
+
+    # Add link to PDF if one exists
+    if "pdfname" in ref:
+        reference += (
+            '[{pdf}]({link}){{:.pub-icon}}  \n'.format(
+                pdf=pdf_icon, link=ref["pdfname"]))
+
     return reference
 
 
@@ -230,8 +238,8 @@ def in_proceedings(ref, faname):
 
     # Start building the reference string.
     reference = (
-        '\n{{:.paper}}\n{open}{title}{close}{{:.papertitle}}  \n'
-        '{open}{authors}{close}{{:.authors}}  \n'
+        '\n{{:.paper}}\n{open}{authors}.{close}{{:.authors}} '
+        '{open}"{title}."{close}{{:.papertitle}} '
         '{open}'.format(
             open=open_span, close=close_span, title=title, authors=authors,
             )
@@ -294,8 +302,8 @@ def thesis(ref, faname):
     year = ref["year"]
 
     reference = (
-        '\n{{:.paper}}\n{open}{title}{close}{{:.papertitle}}  \n'
-        '{open}{authors}{close}{{:.authors}}  \n'
+        '\n{{:.paper}}\n{open}{authors}.{close}{{:.authors}} '
+        '{open}"{title}."{close}{{:.papertitle}}  \n'
         '{open}'.format(
             open=open_span, close=close_span, title=title, authors=authors,
             )
